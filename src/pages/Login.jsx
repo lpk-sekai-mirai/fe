@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../api/axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
+import Background from "../assets/img-bg.webp";
+import Logo from "../assets/logoFull.webp";
 
 const Login = () => {
   const [identifier, setIdentifier] = useState("");
@@ -22,21 +24,28 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="font-sekai min-h-screen flex items-center justify-center "
+    style={{ backgroundImage: `url(${Background})` }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-96"
+        className="p-8 rounded-xl shadow-lg w-96 backdrop-blur-sm"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
+        {/* <h2 className="text-2xl font-bold text-center">
           Login LPK Sekai Mirai
-        </h2>
+        </h2> */}
+        <img 
+          src={Logo} 
+          alt="logo-LPK"
+          className="h-32 w-32 object-contain md:w-64 ml-8 mb-8"  
+        />
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <input
           type="text"
           placeholder="Email / Username / No HP"
           value={identifier}
           onChange={(e) => setIdentifier(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-4 border rounded mb-4"
           required
         />
         <input
@@ -44,21 +53,21 @@ const Login = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-4 border rounded mb-4"
           required
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-primary text-white p-2 rounded hover:bg-primary-700"
         >
           Login
         </button>
-        <div className="mt-4 text-sm text-center">
-          <Link to="/register" className="text-blue-600">
+        <div className="mt-4 text-sm text-center text-white">
+          <Link to="/register" className="text-primary">
             Daftar
           </Link>{" "}
           |
-          <Link to="/forgot-password" className="text-blue-600 ml-2">
+          <Link to="/forgot-password" className="text-primary ml-2">
             Lupa Password
           </Link>
         </div>
