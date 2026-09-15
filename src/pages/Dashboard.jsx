@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import { useAuth } from "../contexts/AuthContext";
 
-const BACKEND_URL = "https://be-04mm.onrender.com";
-
 const Dashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({
@@ -74,11 +72,7 @@ const Dashboard = () => {
           {stats.photos.map((p, idx) => (
             <div key={idx} className="bg-gray-200 p-2 rounded text-center">
               <img
-                src={
-                  p.foto
-                    ? `${BACKEND_URL}${p.foto}`
-                    : "https://via.placeholder.com/150"
-                }
+                src={p.foto}
                 alt={p.nama}
                 className="w-full h-24 object-cover rounded"
               />
