@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-
 const StudentInput = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,7 +45,8 @@ const StudentInput = () => {
             umur: d.umur || "",
             telp: d.telp || "",
           });
-          if (d.foto) setPreview(`${BACKEND_URL}${d.foto}`);
+          // ✅ d.foto sudah berupa URL Cloudinary lengkap
+          if (d.foto) setPreview(d.foto);
         })
         .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
         .finally(() => setLoading(false));
