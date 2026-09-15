@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 
-const BACKEND_URL = "https://be-04mm.onrender.com";
-
 const StatusBadge = ({ status }) => {
   const styles = {
     belum: "bg-gray-100 text-gray-700",
@@ -105,7 +103,7 @@ const StudentList = () => {
                   <td className="p-2">
                     {s.foto ? (
                       <img
-                        src={`${BACKEND_URL}${s.foto}`}
+                        src={s.foto}
                         alt={s.nama}
                         className="w-12 h-12 object-cover rounded-full mx-auto"
                       />

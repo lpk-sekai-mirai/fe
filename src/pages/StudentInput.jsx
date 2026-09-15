@@ -45,7 +45,6 @@ const StudentInput = () => {
             umur: d.umur || "",
             telp: d.telp || "",
           });
-          // ✅ d.foto sudah berupa URL Cloudinary lengkap
           if (d.foto) setPreview(d.foto);
         })
         .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
