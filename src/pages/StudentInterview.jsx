@@ -70,7 +70,7 @@ const StudentInterview = () => {
       <div className="bg-gray-50 border rounded p-4 mb-6 flex gap-4 items-center">
         {student.foto ? (
           <img
-            src={`${BACKEND_URL}${student.foto}`}
+            src={student.foto}
             alt={student.nama}
             className="w-20 h-20 object-cover rounded-full border"
           />
@@ -101,7 +101,6 @@ const StudentInterview = () => {
           >
             <option value="belum">Belum Interview</option>
             <option value="lulus">Lulus Interview</option>
-            <option value="tidak lulus">Tidak Lulus</option>
           </select>
         </div>
 

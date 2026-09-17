@@ -6,12 +6,10 @@ const StatusBadge = ({ status }) => {
   const styles = {
     belum: "bg-gray-100 text-gray-700",
     lulus: "bg-green-100 text-green-700",
-    "tidak lulus": "bg-red-100 text-red-700",
   };
   const labels = {
     belum: "Belum",
     lulus: "Lulus",
-    "tidak lulus": "Tidak Lulus",
   };
   return (
     <span
