@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  // ⚠️ JANGAN set default Content-Type ke application/json di sini
 });
 
 api.interceptors.request.use((config) => {

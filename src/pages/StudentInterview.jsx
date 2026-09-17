@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 
-const BACKEND_URL = "https://be-04mm.onrender.com";
-
 const StudentInterview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -34,12 +32,14 @@ const StudentInterview = () => {
   }, [id]);
 
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+
     try {
+      // ⚠️ Endpoint ini kirim JSON — JANGAN pakai multer di backend route-nya
       await api.put(`/students/${id}/interview`, form);
       alert("Data interview berhasil disimpan!");
       navigate("/students");
@@ -66,7 +66,6 @@ const StudentInterview = () => {
         Atur status interview dan data perusahaan untuk siswa ini.
       </p>
 
-      {/* Info Siswa */}
       <div className="bg-gray-50 border rounded p-4 mb-6 flex gap-4 items-center">
         {student.foto ? (
           <img
@@ -87,7 +86,6 @@ const StudentInterview = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-        {/* Status Interview */}
         <div>
           <label className="block text-sm font-medium mb-1">
             Status Interview <span className="text-red-500">*</span>
@@ -104,7 +102,6 @@ const StudentInterview = () => {
           </select>
         </div>
 
-        {/* Field yang muncul hanya kalau lulus */}
         {isLulus && (
           <>
             <div>

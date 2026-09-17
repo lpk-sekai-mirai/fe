@@ -6,7 +6,9 @@ const StudentInput = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
+
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [preview, setPreview] = useState(null);
   const [fotoFile, setFotoFile] = useState(null);
 
@@ -25,41 +27,47 @@ const StudentInput = () => {
       const autoUid = `SMC-${Date.now()}-${Math.floor(Math.random() * 1000)
         .toString()
         .padStart(3, "0")}`;
-      setForm((prev) => ({ ...prev, uid: autoUid, id: "" }));
+      setForm((prev) => ({ ...prev, uid: autoUid }));
     }
   }, [isEdit]);
 
   // Load data saat edit
   useEffect(() => {
-    if (isEdit) {
-      setLoading(true);
-      api
-        .get(`/students/${id}`)
-        .then((res) => {
-          const d = res.data;
-          setForm({
-            uid: d.uid,
-            id: d.id,
-            nama: d.nama || "",
-            alamat: d.alamat || "",
-            umur: d.umur || "",
-            telp: d.telp || "",
-          });
-          if (d.foto) setPreview(d.foto);
-        })
-        .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
-        .finally(() => setLoading(false));
-    }
+    if (!isEdit) return;
+    setLoading(true);
+    api
+      .get(`/students/${id}`)
+      .then((res) => {
+        const d = res.data;
+        setForm({
+          uid: d.uid || "",
+          id: d.id || "",
+          nama: d.nama || "",
+          alamat: d.alamat || "",
+          umur: d.umur || "",
+          telp: d.telp || "",
+        });
+        if (d.foto) setPreview(d.foto); // sudah URL Cloudinary
+      })
+      .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
+      .finally(() => setLoading(false));
   }, [id, isEdit]);
 
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) return alert("File harus gambar");
-    if (file.size > 5 * 1024 * 1024) return alert("Maks 5 MB");
+
+    if (!file.type.startsWith("image/")) {
+      return alert("File harus berupa gambar");
+    }
+    // Multer limit 20MB, middleware akan kompres ke ≤5MB
+    if (file.size > 20 * 1024 * 1024) {
+      return alert("Ukuran maksimal 20 MB");
+    }
+
     setFotoFile(file);
     const reader = new FileReader();
     reader.onloadend = () => setPreview(reader.result);
@@ -68,17 +76,32 @@ const StudentInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
+
     try {
       const formData = new FormData();
-      Object.keys(form).forEach((key) => formData.append(key, form[key] ?? ""));
-      if (fotoFile) formData.append("foto", fotoFile);
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value ?? "");
+      });
 
-      if (isEdit) await api.put(`/students/${id}`, formData);
-      else await api.post("/students", formData);
+      // Field name HARUS "foto" — sesuai upload.single("foto") di backend
+      if (fotoFile) {
+        formData.append("foto", fotoFile);
+      }
+
+      // ⚠️ TIDAK perlu set Content-Type.
+      // Axios otomatis pakai multipart/form-data + boundary untuk FormData.
+      if (isEdit) {
+        await api.put(`/students/${id}`, formData);
+      } else {
+        await api.post("/students", formData);
+      }
 
       navigate("/students");
     } catch (err) {
       alert(err.response?.data?.error || "Gagal menyimpan");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -95,7 +118,6 @@ const StudentInput = () => {
       </p>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-        {/* UID & ID */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">UID</label>
@@ -118,7 +140,6 @@ const StudentInput = () => {
           </div>
         </div>
 
-        {/* Foto */}
         <div>
           <label className="block text-sm font-medium mb-1">Foto Siswa</label>
           {preview && (
@@ -134,12 +155,9 @@ const StudentInput = () => {
             onChange={handleFileChange}
             className="block w-full text-sm border rounded p-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700"
           />
-          <p className="text-xs text-gray-500 mt-1">
-            Maks 5 MB. JPG/PNG/WEBP/GIF.
-          </p>
+          <p className="text-xs text-gray-500 mt-1">Maks 5 MB</p>
         </div>
 
-        {/* Field dasar */}
         <input
           name="nama"
           placeholder="Nama Lengkap"
@@ -155,7 +173,7 @@ const StudentInput = () => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
-        <input
+        {/* <input
           name="umur"
           type="number"
           placeholder="Umur"
@@ -169,14 +187,15 @@ const StudentInput = () => {
           value={form.telp}
           onChange={handleChange}
           className="border p-2 rounded"
-        />
+        /> */}
 
         <div className="flex gap-2">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            disabled={saving}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
           >
-            Simpan
+            {saving ? "Menyimpan..." : "Simpan"}
           </button>
           <button
             type="button"
