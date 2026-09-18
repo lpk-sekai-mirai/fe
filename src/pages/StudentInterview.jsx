@@ -25,13 +25,8 @@ const StudentInterview = () => {
         setForm({
           statusInterview: res.data.statusInterview || "belum",
           perusahaanLulus: res.data.perusahaanLulus || "",
-          perusahaanLulusJepang: res.data.perusahaanLulusJepang || "", // ➕
-          // ✅ Konversi ke YYYY-MM-DD agar cocok dengan <input type="date">
-          tanggalKeberangkatan: res.data.tanggalKeberangkatan
-            ? new Date(res.data.tanggalKeberangkatan)
-                .toISOString()
-                .split("T")[0]
-            : "",
+          perusahaanLulusJepang: res.data.perusahaanLulusJepang || "",
+          tanggalKeberangkatan: res.data.tanggalKeberangkatan || "",
         });
       })
       .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
@@ -146,6 +141,7 @@ const StudentInterview = () => {
               <input
                 name="tanggalKeberangkatan"
                 type="date"
+                lang="id-ID"
                 value={form.tanggalKeberangkatan || ""}
                 onChange={handleChange}
                 className="border p-2 rounded w-full"
