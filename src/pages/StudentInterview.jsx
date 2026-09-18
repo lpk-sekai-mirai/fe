@@ -13,6 +13,7 @@ const StudentInterview = () => {
   const [form, setForm] = useState({
     statusInterview: "belum",
     perusahaanLulus: "",
+    perusahaanLulusJepang: "", // ➕
     tanggalKeberangkatan: "",
   });
 
@@ -24,7 +25,13 @@ const StudentInterview = () => {
         setForm({
           statusInterview: res.data.statusInterview || "belum",
           perusahaanLulus: res.data.perusahaanLulus || "",
-          tanggalKeberangkatan: res.data.tanggalKeberangkatan || "",
+          perusahaanLulusJepang: res.data.perusahaanLulusJepang || "", // ➕
+          // ✅ Konversi ke YYYY-MM-DD agar cocok dengan <input type="date">
+          tanggalKeberangkatan: res.data.tanggalKeberangkatan
+            ? new Date(res.data.tanggalKeberangkatan)
+                .toISOString()
+                .split("T")[0]
+            : "",
         });
       })
       .catch((err) => alert(err.response?.data?.error || "Gagal memuat data"))
@@ -39,7 +46,6 @@ const StudentInterview = () => {
     setSaving(true);
 
     try {
-      // ⚠️ Endpoint ini kirim JSON — JANGAN pakai multer di backend route-nya
       await api.put(`/students/${id}/interview`, form);
       alert("Data interview berhasil disimpan!");
       navigate("/students");
@@ -106,7 +112,8 @@ const StudentInterview = () => {
           <>
             <div>
               <label className="block text-sm font-medium mb-1">
-                Perusahaan Lulus <span className="text-red-500">*</span>
+                Perusahaan Lulus (Indonesia){" "}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 name="perusahaanLulus"
@@ -115,6 +122,20 @@ const StudentInterview = () => {
                 onChange={handleChange}
                 className="border p-2 rounded w-full"
                 required={isLulus}
+              />
+            </div>
+
+            {/* ➕ Perusahaan versi Jepang */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Perusahaan Lulus (Jepang)
+              </label>
+              <input
+                name="perusahaanLulusJepang"
+                placeholder="Contoh: トヨタ自動車"
+                value={form.perusahaanLulusJepang}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
               />
             </div>
 

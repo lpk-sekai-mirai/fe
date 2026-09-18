@@ -17,6 +17,9 @@ const StudentInput = () => {
     id: "",
     nama: "",
     alamat: "",
+    // ➕ Data Jepang
+    namaJepang: "",
+    alamatJepang: "",
     umur: "",
     telp: "",
   });
@@ -44,6 +47,9 @@ const StudentInput = () => {
           id: d.id || "",
           nama: d.nama || "",
           alamat: d.alamat || "",
+          // ➕ Data Jepang
+          namaJepang: d.namaJepang || "",
+          alamatJepang: d.alamatJepang || "",
           umur: d.umur || "",
           telp: d.telp || "",
         });
@@ -63,7 +69,6 @@ const StudentInput = () => {
     if (!file.type.startsWith("image/")) {
       return alert("File harus berupa gambar");
     }
-    // Multer limit 20MB, middleware akan kompres ke ≤5MB
     if (file.size > 20 * 1024 * 1024) {
       return alert("Ukuran maksimal 20 MB");
     }
@@ -84,13 +89,8 @@ const StudentInput = () => {
         formData.append(key, value ?? "");
       });
 
-      // Field name HARUS "foto" — sesuai upload.single("foto") di backend
-      if (fotoFile) {
-        formData.append("foto", fotoFile);
-      }
+      if (fotoFile) formData.append("foto", fotoFile);
 
-      // ⚠️ TIDAK perlu set Content-Type.
-      // Axios otomatis pakai multipart/form-data + boundary untuk FormData.
       if (isEdit) {
         await api.put(`/students/${id}`, formData);
       } else {
@@ -155,9 +155,15 @@ const StudentInput = () => {
             onChange={handleFileChange}
             className="block w-full text-sm border rounded p-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700"
           />
-          <p className="text-xs text-gray-500 mt-1">Maks 5 MB</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Maks 20 MB (otomatis dikompres ke ≤5 MB)
+          </p>
         </div>
 
+        {/* ======== DATA INDONESIA ======== */}
+        <h2 className="font-semibold text-gray-700 mt-2 border-b pb-1">
+          Data Indonesia
+        </h2>
         <input
           name="nama"
           placeholder="Nama Lengkap"
@@ -173,23 +179,27 @@ const StudentInput = () => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
-        {/* <input
-          name="umur"
-          type="number"
-          placeholder="Umur"
-          value={form.umur}
+
+        {/* ======== DATA JEPANG ======== */}
+        <h2 className="font-semibold text-gray-700 mt-4 border-b pb-1">
+          Data Bahasa Jepang (Opsional)
+        </h2>
+        <input
+          name="namaJepang"
+          placeholder="Nama dalam Bahasa Jepang"
+          value={form.namaJepang}
           onChange={handleChange}
           className="border p-2 rounded"
         />
         <input
-          name="telp"
-          placeholder="No Telepon"
-          value={form.telp}
+          name="alamatJepang"
+          placeholder="Alamat dalam Bahasa Jepang"
+          value={form.alamatJepang}
           onChange={handleChange}
           className="border p-2 rounded"
-        /> */}
+        />
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-2">
           <button
             type="submit"
             disabled={saving}
