@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Logo from "../assets/logo.webp";
+
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -15,7 +17,12 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
       <div className="flex space-x-4">
-        <Link to="/dashboard" className="hover:underline">
+        <img 
+          src={Logo} 
+          alt="logo-LPK"
+          className="h-24 w-24 object-contain"  
+        />
+        <Link to="/dashboard" className="items-center justify-items-center hover:underline">
           Dashboard
         </Link>{" "}
         {/* ✅ route ada */}

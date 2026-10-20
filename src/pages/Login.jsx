@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../api/axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
-import Background from "../assets/img-bg.webp";
+// import Background from "../assets/img-bg.webp";
 import Logo from "../assets/logoFull.webp";
 
 const Login = () => {
@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <div className="font-sekai min-h-screen flex items-center justify-center "
-    style={{ backgroundImage: `url(${Background})` }}
+    // style={{ backgroundImage: `url(${Background})` }}
     >
       <form
         onSubmit={handleSubmit}
@@ -37,7 +37,7 @@ const Login = () => {
         <img 
           src={Logo} 
           alt="logo-LPK"
-          className="h-32 w-32 object-contain md:w-64 ml-8 mb-8"  
+          className="h-32 w-32 object-contain sm:w-64 ml-8 mb-8"  
         />
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <input
@@ -62,12 +62,12 @@ const Login = () => {
         >
           Login
         </button>
-        <div className="mt-4 text-sm text-center text-white">
+        <div className="mt-4 text-sm text-center text-black">
           <Link to="/register" className="text-primary">
             Daftar
           </Link>{" "}
           |
-          <Link to="/forgot-password" className="text-primary ml-2">
+          <Link to="/forgot-password" className="ml-1 text-primary">
             Lupa Password
           </Link>
         </div>

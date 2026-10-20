@@ -1,6 +1,8 @@
 import { useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
+// import Background from "../assets/img-bg.webp";
+import Logo from "../assets/logoFull.webp";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -27,11 +29,18 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100"
+    // style={{ backgroundImage: `url(${Background})` }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-96"
+        className="p-8 rounded-xl shadow-lg w-96"
       >
+        <img 
+          src={Logo} 
+          alt="logo-LPK"
+          className="h-32 w-32 object-contain md:w-64 ml-8 mb-8"  
+        />
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         {msg && <p className="text-green-600 text-sm mb-4">{msg}</p>}
         <input
