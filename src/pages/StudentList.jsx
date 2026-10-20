@@ -87,8 +87,7 @@ const StudentList = () => {
                 <th className="p-2">Foto</th>
                 <th>ID</th>
                 <th>Nama</th>
-                <th>Umur</th>
-                <th>Telp</th>
+                <th>Alamat</th>
                 <th>Status</th>
                 <th>Perusahaan</th>
                 <th>Keberangkatan</th>
@@ -113,8 +112,7 @@ const StudentList = () => {
                   </td>
                   <td className="text-xs">{s.id}</td>
                   <td className="font-medium">{s.nama}</td>
-                  <td>{s.umur || "-"}</td>
-                  <td>{s.telp || "-"}</td>
+                  <td>{s.alamat || "-"}</td>
                   <td>
                     <StatusBadge status={s.statusInterview || "belum"} />
                   </td>
