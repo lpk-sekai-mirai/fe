@@ -20,6 +20,13 @@ const StatusBadge = ({ status }) => {
   );
 };
 
+const formatKeberangkatan = (value) => {
+  if (value === null || value === undefined || value === "") {
+    return "-";
+  }
+  return String(value).trim();
+};
+
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,13 +124,7 @@ const StudentList = () => {
                     <StatusBadge status={s.statusInterview || "belum"} />
                   </td>
                   <td>{s.perusahaanLulus || "-"}</td>
-                  <td>
-                    {s.tanggalKeberangkatan
-                      ? new Date(s.tanggalKeberangkatan).toLocaleDateString(
-                          "id-ID"
-                        )
-                      : "-"}
-                  </td>
+                  <td>{formatKeberangkatan(s.tanggalKeberangkatan)}</td>
                   <td>
                     <div className="flex flex-col gap-1 items-center">
                       <Link
